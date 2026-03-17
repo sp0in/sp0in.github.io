@@ -1,48 +1,35 @@
 const LONGUEUR_MOT = 5;
-const MAX_ESSAIS = 8; 
+const MAX_ESSAIS = 8;
 
-const dictionnaire = ["ARBRE", "CHIEN", "PLAGE", "TABLE", "LIVRE", "SABLE", "POMME", 
-    "ADIEU", "AIMER", "ALBUM", "ALLER", "AMOUR", "APPEL", "ARBRE", "ASILE", "ASTRE", "AVION",
-    "BALLE", "BARRE", "BATON", "BLANC", "BOIRE", "BOITE", "BONNE", "BRUIT", "BRUTE", "CALME", 
-    "CANAL", "CARTE", "CAUSE", "CHAMP", "CHANT", "CHAOS", "CHAUD", "CHIEN", "CHOIX", "CHOSE", 
-    "CIBLE", "COEUR", "CORPS", "COURS", "CRAIE", "CRIME", "CYCLE", "DANSE", "DEBUT", "DROIT", 
-    "ECHEC", "ECRAN", "ECRIT", "EMAIL", "ENFER", "ENVIE", "ETAPE", "ETUDE", "FABLE", "FACILE", 
-    "FAIRE", "FEMME", "FERME", "FETER", "FIBRE", "FILLE", "FINIR", "FLEUR", "FLUTE", "FORCE", 
-    "FORME", "FROID", "FRUIT", "GEANT", "GLACE", "GOMME", "GOUT", "GRAND", "GRAVE", "GRELE", 
-    "GUIDE", "HABIT", "HERBE", "HEURE", "IMAGE", "JAUNE", "JEUNE", "JOUER", "JOURS", "LANCE", 
-    "LAPIN", "LARGE", "LECON", "LENTE", "LIBRE", "LIGNE", "LIVRE", "LOURD", "LOYER", "LUNDI", 
-    "LYCEE", "MAGIE", "MAIRE", "MAINS", "MARGE", "MARIE", "MATIN", "MERCI", "METRO", "MIEUX", 
-    "MINCE", "MONDE", "MOTIF", "MOYEN", "MUET", "NEIGE", "NEUVE", "NOBLE", "NOCES", "NOIRE", 
-    "NOTRE", "NUAGE", "ODEUR", "OFFRE", "ONGLE", "ORDRE", "ORGUE", "OUEST", "OUTIL", "PAUSE", 
-    "PHASE", "PHOTO", "PIANO", "PIECE", "PIEGE", "PILOT", "PLACE", "PLAGE", "PLEIN", "PLUME", 
-    "POCHE", "POIDS", "POINT", "POIRE", "POMME", "PORTE", "POSTE", "POULE", "PRIX", "RADIO", 
-    "RAYON", "REPAS", "RESTE", "RICHE", "ROBOT", "ROUGE", "ROUTE", "SABLE", "SAGES", "SAINT", 
-    "SALLE", "SAPIN", "SAUCE", "SAVON", "SCENE", "SCORE", "SEIZE", "SELON", "SIEGE", "SIGNE", 
-    "SINGE", "STADE", "STYLE", "SUCRE", "SUITE", "SUJET", "TABLE", "TACHE", "TARIF", "TASSE", 
-    "TEMPS", "TEXTE", "THEME", "TIERS", "TIGRE", "TIRER", "TITRE", "TOMBE", "TOTAL", "TRAIN", 
-    "TRAIT", "TRIER", "TROIS", "TRONC", "USAGE", "USINE", "VAGUE", "VERRE", "VERTU", "VIDER", 
-    "VIEUX", "VILLE", "VINGT", "VISER", "VIVRE", "VOILE", "VOIR", "VOLER", "VOTRE", "VRAIE"
-];
-
-const motSecret = choisirMotSecret();
+let dictionnaire = [];
+let motSecret = "";
 let essaiActuel = 0;
 let lettreActuelle = 0;
-let grilleJeu = [];
 let jeuTermine = false;
 let grilleVerrouillee = false;
 
+async function chargerDonnees() {
+    try {
+        const reponse = await fetch('mots.json');
+        dictionnaire = await reponse.json();
+        
+        motSecret = choisirMotSecret();
+        console.log("Dictionnaire chargé. Solution :", motSecret);
+        
+        initialiserGrille();
+        initialiserClavier();
+    } catch (erreur) {
+        console.error("Impossible de charger les mots :", erreur);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    initialiserGrille();
-    initialiserClavier();
+    chargerDonnees();
 });
 
 function choisirMotSecret() {
     const indexAleatoire = Math.floor(Math.random() * dictionnaire.length);
     return normaliserMot(dictionnaire[indexAleatoire]);
-}
-
-function normaliserMot(mot) {
-    return mot.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
 }
 
 function initialiserGrille() {

@@ -1,7 +1,7 @@
 /* --- 1. VARIABLES DE COULEURS --- */
 :root {
     --couleur-fond: #121213;
-    --couleur-en-tete: #1a1a1b; /* Gris foncé légèrement plus clair */
+    --couleur-en-tete: #1a1a1b;
     --couleur-texte: #ffffff;
     --bordure-vide: #3a3a3c;
     --bordure-remplie: #565758;
@@ -21,7 +21,7 @@
 }
 
 body {
-    background-color: var(--couleur-fond);
+    background-color: var(--couleur-fond);;
     color: var(--couleur-texte);
     font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
     display: flex;
@@ -87,7 +87,7 @@ header {
     font-size: clamp(20px, 5vmin, 32px);
     font-weight: bold;
     text-transform: uppercase;
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.4s ease;
 }
 
 .case[data-remplie] {
@@ -311,4 +311,43 @@ button.touche-large {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-5px); }
     40%, 80% { transform: translateX(5px); }
+}
+
+#zone-bas {
+    display: grid;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    justify-items: center;
+}
+
+#clavier, #ecran-fin {
+    grid-area: 1 / 1;
+    width: 100%;
+}
+
+#ecran-fin {
+    max-width: 500px;
+    padding: clamp(10px, 3vh, 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+    background-color: var(--couleur-fond);
+}
+
+#logo-site {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+#logo-site:active {
+    transform: scale(0.9);
+}
+
+button.assombrie {
+    background-color: #222222;
+    color: #555555;
+    opacity: 0.5;
+    transition: background-color 0.3s, opacity 0.3s;
 }

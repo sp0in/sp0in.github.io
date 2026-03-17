@@ -1,0 +1,304 @@
+/* --- 1. VARIABLES DE COULEURS --- */
+:root {
+    --couleur-fond: #121213;
+    --couleur-en-tete: #1a1a1b; /* Gris foncé légèrement plus clair */
+    --couleur-texte: #ffffff;
+    --bordure-vide: #3a3a3c;
+    --bordure-remplie: #565758;
+    
+    --couleur-correct: #538d4e; 
+    --couleur-present: #b59f3b; 
+    --couleur-absent: #3a3a3c;  
+    
+    --touche-clavier: #818384;
+}
+
+/* --- 2. STYLE GLOBAL --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden; 
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1; 
+    width: 100%;
+    padding-bottom: 0; 
+}
+
+header {
+    width: 100%;
+    background-color: var(--couleur-en-tete); 
+    text-align: center;
+    padding: clamp(10px, 2vh, 15px) 0;
+    margin-bottom: clamp(10px, 3vh, 30px);
+    
+}
+
+#logo-site {
+    height: clamp(60px, 12vh, 90px);
+    width: auto;
+
+    filter: brightness(1.5) contrast(1.5) invert(1);
+    mix-blend-mode: screen;
+}
+
+#grille {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3px, 1vh, 5px); 
+    margin-top: auto; 
+}
+
+.ligne {
+    display: flex;
+    gap: clamp(3px, 1vh, 5px); 
+    align-items: center;
+    justify-content: center;
+}
+
+.lettres {
+    display: flex;
+    gap: clamp(3px, 1vw, 5px);
+}
+
+.case {
+    width: clamp(25px, 6vh, 60px);
+    height: clamp(25px, 6vh, 60px);
+    border: 2px solid var(--bordure-vide);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    font-size: clamp(20px, 5vmin, 32px);
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.case[data-remplie] {
+    border-color: var(--bordure-remplie);
+}
+
+#clavier {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 1vh, 8px);
+    width: 100%;
+    max-width: 500px; 
+    padding: clamp(5px, 2vh, 10px);
+    
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.ligne-clavier {
+    display: flex;
+    justify-content: center;
+    gap: clamp(4px, 1vw, 6px);
+}
+
+button {
+    font-family: inherit;
+    font-weight: bold;
+    border: none;
+    padding: 0;
+    margin: 0;
+    
+    height: clamp(35px, 7vh, 58px);
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--touche-clavier);
+    color: var(--couleur-texte);
+    flex: 1; 
+    
+    font-size: clamp(15px, 4vw, 22px);
+    text-transform: uppercase;
+}
+
+button.touche-large {
+    flex: 1.5; 
+    font-size: clamp(12px, 3vw, 16px);
+}
+
+.case.correct, button.correct {
+    background-color: var(--couleur-correct);
+    border-color: var(--couleur-correct);
+    color: white;
+}
+
+.case.present, button.present {
+    background-color: var(--couleur-present);
+    border-color: var(--couleur-present);
+    color: white;
+}
+
+.case.absent, button.absent {
+    background-color: var(--couleur-absent);
+    border-color: var(--couleur-absent);
+    color: white;
+}
+
+.case.flip {
+    animation: flip 0.6s ease-in-out forwards;
+}
+
+@keyframes flip {
+    0% { transform: rotateX(0deg); }
+    50% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+}
+
+.case.pop {
+    animation: pop 0.1s ease-in-out;
+}
+
+@keyframes pop {
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.indicateurs {
+    display: flex;
+    gap: clamp(3px, 1vh, 5px); 
+    margin-left: clamp(5px, 2vw, 15px);
+}
+
+.indicateur-carre {
+    width: clamp(25px, 6vh, 60px);
+    height: clamp(25px, 6vh, 60px);
+    
+    border: 1px solid var(--bordure-vide); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    
+    font-size: clamp(16px, 4vmin, 24px); 
+    color: white;
+    
+    opacity: 0.15; 
+    transition: all 0.4s ease;
+}
+
+.ligne.validee .indicateur-carre {
+    opacity: 1;
+    border-color: var(--bordure-remplie); 
+}
+
+.ind-vert { background-color: var(--couleur-correct); }
+.ind-jaune { background-color: var(--couleur-present); }
+.ind-rouge { background-color: #a04040; }
+
+.transition-fondue {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.transition-fondue.cache {
+    opacity: 0;
+    transform: translateY(15px);
+    pointer-events: none;
+}
+
+#ecran-fin {
+    width: 100%;
+    max-width: 500px;
+    padding: clamp(10px, 3vh, 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+}
+
+#fin-titre {
+    font-size: clamp(24px, 6vmin, 32px);
+    margin: 0;
+    color: var(--couleur-texte);
+}
+
+#fin-texte {
+    font-size: clamp(14px, 3.5vmin, 18px);
+    color: #818384; 
+}
+
+#btn-rejouer {
+    margin-top: 10px;
+    padding: 15px 40px;
+    background-color: var(--couleur-correct);
+    color: white;
+    font-size: clamp(14px, 4vmin, 18px);
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.2s, transform 0.1s;
+    
+    flex: none; 
+    height: auto;
+}
+
+#btn-rejouer:hover {
+    background-color: #45753f; 
+}
+
+#btn-rejouer:active {
+    transform: scale(0.95); 
+}
+
+.notification {
+    position: fixed;
+    top: 10%;
+    background-color: var(--couleur-texte);
+    color: var(--couleur-fond);
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.notification.cache {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ligne.validee .case {
+    cursor: pointer;
+}
+
+.case.pred-rouge {
+    background-color: #a04040;
+    border-color: #a04040;
+    color: white;
+}
+
+.case.pred-jaune {
+    background-color: var(--couleur-present);
+    border-color: var(--couleur-present);
+    color: white;
+}
+
+.case.pred-vert {
+    background-color: var(--couleur-correct);
+    border-color: var(--couleur-correct);
+    color: white;
+}

@@ -1,37 +1,47 @@
 const LONGUEUR_MOT = 5;
-const MAX_ESSAIS = 8;
+const MAX_ESSAIS = 8; 
 
 let dictionnaire = [];
 let motSecret = "";
 let essaiActuel = 0;
 let lettreActuelle = 0;
+let grilleJeu = [];
 let jeuTermine = false;
 let grilleVerrouillee = false;
 
-async function chargerDonnees() {
+// --- 1. CHARGEMENT DES DONNÉES ---
+document.addEventListener("DOMContentLoaded", () => {
+    chargerDictionnaire();
+});
+
+async function chargerDictionnaire() {
     try {
         const reponse = await fetch('./mots.json');
+        if (!reponse.ok) throw new Error("Fichier JSON introuvable");
+        
         dictionnaire = await reponse.json();
         
         motSecret = choisirMotSecret();
-        console.log("Dictionnaire chargé. Solution :", motSecret);
+        console.log("Dictionnaire chargé. Solution :", motSecret); // Pour tes tests
         
         initialiserGrille();
         initialiserClavier();
     } catch (erreur) {
-        console.error("Impossible de charger les mots :", erreur);
+        console.error("Erreur de chargement :", erreur);
+        afficherNotification("Erreur de connexion au dictionnaire !");
     }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    chargerDonnees();
-});
 
 function choisirMotSecret() {
     const indexAleatoire = Math.floor(Math.random() * dictionnaire.length);
     return normaliserMot(dictionnaire[indexAleatoire]);
 }
 
+function normaliserMot(mot) {
+    return mot.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+}
+
+// --- 2. INITIALISATION ---
 function initialiserGrille() {
     const conteneurGrille = document.getElementById("grille");
     conteneurGrille.innerHTML = ""; 
@@ -51,6 +61,7 @@ function initialiserGrille() {
             caseDiv.classList.add("case");
             caseDiv.setAttribute("id", `case-${i}-${j}`);
             
+            // Logique de prédiction manuelle (le clic sur les cases)
             caseDiv.addEventListener("click", () => {
                 if (i >= essaiActuel || jeuTermine) return;
 
@@ -102,6 +113,7 @@ function initialiserClavier() {
     });
 }
 
+// --- 3. GESTION DU JEU ---
 function gererTouche(touche) {
     if (jeuTermine || grilleVerrouillee) return;
 
@@ -141,12 +153,20 @@ function ajouterLettre(lettre) {
 function validerMot() {
     if (lettreActuelle !== LONGUEUR_MOT) {
         afficherNotification("Le mot est trop court !");
+        secouerLigneCourante();
+        return;
+    }
+
+    const motSaisi = grilleJeu[essaiActuel].join("");
+
+    // SÉCURITÉ : Vérifie si le mot est dans le fichier JSON
+    if (!dictionnaire.includes(motSaisi)) {
+        afficherNotification("Ce mot n'est pas dans le dictionnaire");
+        secouerLigneCourante();
         return;
     }
 
     grilleVerrouillee = true;
-
-    const motSaisi = grilleJeu[essaiActuel].join("");
     verifierCouleurs(motSaisi);
 
     setTimeout(() => {
@@ -165,68 +185,73 @@ function validerMot() {
     }, 500);
 }
 
-function afficherNotification(message) {
-    const notif = document.getElementById("notification");
-    notif.textContent = message;
-    notif.classList.remove("cache");
-    
-    setTimeout(() => {
-        notif.classList.add("cache");
-    }, 2000);
+function secouerLigneCourante() {
+    const ligneDiv = document.getElementById(`ligne-${essaiActuel}`);
+    ligneDiv.classList.remove("shake"); 
+    void ligneDiv.offsetWidth; // Astuce pour relancer l'animation
+    ligneDiv.classList.add("shake");
 }
 
-function finDeJeu(victoire) {
-    jeuTermine = true;
+// --- 4. LOGIQUE MASTERMIND ---
+function verifierCouleurs(motSaisi) {
+    const lettresSecretes = motSecret.split("");
+    let motSaisiArray = motSaisi.split("");
     
-    revelerToutesLesCases();
-    
-    const clavier = document.getElementById("clavier");
-    const ecranFin = document.getElementById("ecran-fin");
-    const titre = document.getElementById("fin-titre");
-    const texte = document.getElementById("fin-texte");
-    const conteneurMot = document.getElementById("fin-mot-secret");
-    
-    conteneurMot.innerHTML = "";
-    const nbEssais = victoire ? essaiActuel + 1 : MAX_ESSAIS;
-    
-    if (victoire) {
-        titre.textContent = "Félicitations ! 🎉";
-        texte.textContent = `Vous avez trouvé en ${nbEssais} essai(s).`;
-    } else {
-        titre.textContent = "Perdu... 😢";
-        texte.textContent = "Le mot à trouver était :";
+    let nbVerts = 0;
+    let nbJaunes = 0;
+    let nbRouges = 0;
+
+    for (let i = 0; i < LONGUEUR_MOT; i++) {
+        if (motSaisiArray[i] === lettresSecretes[i]) {
+            nbVerts++;
+            lettresSecretes[i] = null; 
+            motSaisiArray[i] = null;   
+        }
     }
 
     for (let i = 0; i < LONGUEUR_MOT; i++) {
-        const caseDiv = document.createElement("div");
-        caseDiv.classList.add("case", "correct");
-        caseDiv.textContent = motSecret[i];
-        conteneurMot.appendChild(caseDiv);
+        if (motSaisiArray[i] !== null) { 
+            const indexLettre = lettresSecretes.indexOf(motSaisiArray[i]);
+            if (indexLettre !== -1) {
+                nbJaunes++;
+                lettresSecretes[indexLettre] = null; 
+            } else {
+                nbRouges++;
+            }
+        }
     }
 
-    setTimeout(() => {
-        
-        clavier.classList.add("cache");
-        
+    // Mise à jour des indicateurs à droite
+    document.getElementById(`ind-vert-${essaiActuel}`).textContent = nbVerts;
+    document.getElementById(`ind-jaune-${essaiActuel}`).textContent = nbJaunes;
+    document.getElementById(`ind-rouge-${essaiActuel}`).textContent = nbRouges;
+
+    const ligneDiv = document.getElementById(`ligne-${essaiActuel}`);
+    ligneDiv.classList.add("validee");
+
+    // Animation pop des lettres validées
+    for (let i = 0; i < LONGUEUR_MOT; i++) {
         setTimeout(() => {
-            
-            clavier.style.display = "none";
-            ecranFin.style.display = "flex";
-            
-            setTimeout(() => {
-                ecranFin.classList.remove("cache");
-            }, 50);
-            
-        }, 500); 
-        
-    }, 1200);
+            document.getElementById(`case-${essaiActuel}-${i}`).classList.add("pop");
+        }, i * 100);
+    }
+
+    // Animation pop des indicateurs
+    const indicateurs = ligneDiv.querySelectorAll('.indicateur-carre');
+    indicateurs.forEach((ind, index) => {
+        setTimeout(() => {
+            ind.style.transform = "scale(1.15)";
+            setTimeout(() => ind.style.transform = "scale(1)", 150);
+        }, (LONGUEUR_MOT * 100) + (index * 100));
+    });
 }
 
+// --- 5. FIN DE JEU ET RÉVÉLATION ---
 function revelerToutesLesCases() {
     const couleurs = {
-        "correct": "#538d4e",
-        "present": "#b59f3b",
-        "absent": "#3a3a3c"
+        "correct": "var(--couleur-correct)",
+        "present": "var(--couleur-present)",
+        "absent": "var(--couleur-absent)"
     };
 
     for (let i = 0; i < MAX_ESSAIS; i++) {
@@ -259,12 +284,11 @@ function revelerToutesLesCases() {
                 const caseDiv = document.getElementById(`case-${i}-${j}`);
                 
                 caseDiv.classList.remove("pred-rouge", "pred-jaune", "pred-vert");
-                
                 const couleurFinale = couleurs[resultats[j]];
 
                 caseDiv.animate([
                     { transform: 'rotateX(0deg)' },
-                    { transform: 'rotateX(90deg)', offset: 0.5, backgroundColor: 'transparent', borderColor: '#565758' },
+                    { transform: 'rotateX(90deg)', offset: 0.5, backgroundColor: 'transparent', borderColor: 'var(--bordure-remplie)' },
                     { transform: 'rotateX(0deg)', offset: 1, backgroundColor: couleurFinale, borderColor: couleurFinale, color: 'white' }
                 ], {
                     duration: 600,
@@ -280,52 +304,53 @@ function revelerToutesLesCases() {
     }
 }
 
-function verifierCouleurs(motSaisi) {
-    const lettresSecretes = motSecret.split("");
-    let motSaisiArray = motSaisi.split("");
+function finDeJeu(victoire) {
+    jeuTermine = true;
     
-    let nbVerts = 0;
-    let nbJaunes = 0;
-    let nbRouges = 0;
-
-    for (let i = 0; i < LONGUEUR_MOT; i++) {
-        if (motSaisiArray[i] === lettresSecretes[i]) {
-            nbVerts++;
-            lettresSecretes[i] = null; 
-            motSaisiArray[i] = null;   
-        }
+    revelerToutesLesCases();
+    
+    const clavier = document.getElementById("clavier");
+    const ecranFin = document.getElementById("ecran-fin");
+    const titre = document.getElementById("fin-titre");
+    const texte = document.getElementById("fin-texte");
+    const conteneurMot = document.getElementById("fin-mot-secret");
+    
+    conteneurMot.innerHTML = "";
+    const nbEssais = victoire ? essaiActuel + 1 : MAX_ESSAIS;
+    
+    if (victoire) {
+        titre.textContent = "Félicitations ! 🎉";
+        texte.textContent = `Vous avez trouvé en ${nbEssais} essai(s).`;
+    } else {
+        titre.textContent = "Perdu... 😢";
+        texte.textContent = "Le mot à trouver était :";
     }
 
     for (let i = 0; i < LONGUEUR_MOT; i++) {
-        if (motSaisiArray[i] !== null) { 
-            const indexLettre = lettresSecretes.indexOf(motSaisiArray[i]);
-            if (indexLettre !== -1) {
-                nbJaunes++;
-                lettresSecretes[indexLettre] = null; 
-            } else {
-                nbRouges++;
-            }
-        }
+        const caseDiv = document.createElement("div");
+        caseDiv.classList.add("case", "correct");
+        caseDiv.textContent = motSecret[i];
+        conteneurMot.appendChild(caseDiv);
     }
 
-    document.getElementById(`ind-vert-${essaiActuel}`).textContent = nbVerts;
-    document.getElementById(`ind-jaune-${essaiActuel}`).textContent = nbJaunes;
-    document.getElementById(`ind-rouge-${essaiActuel}`).textContent = nbRouges;
-
-    const ligneDiv = document.getElementById(`ligne-${essaiActuel}`);
-    ligneDiv.classList.add("validee");
-
-    for (let i = 0; i < LONGUEUR_MOT; i++) {
+    setTimeout(() => {
+        clavier.classList.add("cache");
         setTimeout(() => {
-            document.getElementById(`case-${essaiActuel}-${i}`).classList.add("pop");
-        }, i * 100);
-    }
+            clavier.style.display = "none";
+            ecranFin.style.display = "flex";
+            setTimeout(() => {
+                ecranFin.classList.remove("cache");
+            }, 50);
+        }, 500); 
+    }, 1200);
+}
 
-    const indicateurs = ligneDiv.querySelectorAll('.indicateur-carre');
-    indicateurs.forEach((ind, index) => {
-        setTimeout(() => {
-            ind.style.transform = "scale(1.15)";
-            setTimeout(() => ind.style.transform = "scale(1)", 150);
-        }, (LONGUEUR_MOT * 100) + (index * 100));
-    });
+function afficherNotification(message) {
+    const notif = document.getElementById("notification");
+    notif.textContent = message;
+    notif.classList.remove("cache");
+    
+    setTimeout(() => {
+        notif.classList.add("cache");
+    }, 2000);
 }

@@ -10,7 +10,7 @@ let grilleVerrouillee = false;
 
 async function chargerDonnees() {
     try {
-        const reponse = await fetch('mots.json');
+        const reponse = await fetch('./mots.json');
         dictionnaire = await reponse.json();
         
         motSecret = choisirMotSecret();

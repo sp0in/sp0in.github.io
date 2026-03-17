@@ -9,25 +9,33 @@ let grilleJeu = [];
 let jeuTermine = false;
 let grilleVerrouillee = false;
 
-// --- 1. CHARGEMENT DES DONNÉES ---
 document.addEventListener("DOMContentLoaded", () => {
     chargerDictionnaire();
+    
+    document.getElementById("logo-site").addEventListener("click", () => {
+        if (jeuTermine) return;
+        document.querySelectorAll(".case").forEach(c => {
+            if (!c.classList.contains("auto-rouge") && !c.classList.contains("correct") && !c.classList.contains("present")) {
+                c.classList.remove("pred-rouge", "pred-jaune", "pred-vert");
+            }
+        });
+        mettreAJourClavier();
+    });
 });
 
 async function chargerDictionnaire() {
     try {
         const reponse = await fetch('./mots.json');
         if (!reponse.ok) throw new Error("Fichier JSON introuvable");
-        
         dictionnaire = await reponse.json();
         
         motSecret = choisirMotSecret();
-        console.log("Dictionnaire chargé. Solution :", motSecret); // Pour tes tests
+        console.log("Dictionnaire chargé. Solution :", motSecret);
         
         initialiserGrille();
         initialiserClavier();
     } catch (erreur) {
-        console.error("Erreur de chargement :", erreur);
+        console.error("Erreur :", erreur);
         afficherNotification("Erreur de connexion au dictionnaire !");
     }
 }
@@ -41,7 +49,6 @@ function normaliserMot(mot) {
     return mot.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
 }
 
-// --- 2. INITIALISATION ---
 function initialiserGrille() {
     const conteneurGrille = document.getElementById("grille");
     conteneurGrille.innerHTML = ""; 
@@ -61,9 +68,8 @@ function initialiserGrille() {
             caseDiv.classList.add("case");
             caseDiv.setAttribute("id", `case-${i}-${j}`);
             
-            // Logique de prédiction manuelle (le clic sur les cases)
             caseDiv.addEventListener("click", () => {
-                if (i >= essaiActuel || jeuTermine) return;
+                if (i >= essaiActuel || jeuTermine || caseDiv.classList.contains("auto-rouge")) return;
 
                 if (caseDiv.classList.contains("pred-rouge")) {
                     caseDiv.classList.remove("pred-rouge");
@@ -76,6 +82,8 @@ function initialiserGrille() {
                 } else {
                     caseDiv.classList.add("pred-rouge");
                 }
+
+                mettreAJourClavier();
             });
 
             conteneurLettres.appendChild(caseDiv);
@@ -84,7 +92,6 @@ function initialiserGrille() {
         
         const conteneurIndicateurs = document.createElement("div");
         conteneurIndicateurs.classList.add("indicateurs");
-        
         conteneurIndicateurs.innerHTML = `
             <div class="indicateur-carre ind-vert" id="ind-vert-${i}">0</div>
             <div class="indicateur-carre ind-jaune" id="ind-jaune-${i}">0</div>
@@ -100,11 +107,8 @@ function initialiserGrille() {
 function initialiserClavier() {
     const touches = document.querySelectorAll("#clavier button");
     for (let touche of touches) {
-        touche.addEventListener("click", () => {
-            gererTouche(touche.getAttribute("data-key"));
-        });
+        touche.addEventListener("click", () => gererTouche(touche.getAttribute("data-key")));
     }
-
     document.addEventListener("keydown", (e) => {
         let touche = e.key;
         if (touche === "Enter" || touche === "Backspace" || /^[a-zA-ZÀ-ÿ]$/.test(touche)) {
@@ -113,19 +117,48 @@ function initialiserClavier() {
     });
 }
 
-// --- 3. GESTION DU JEU ---
+function mettreAJourClavier() {
+    let lettresRouges = new Set();
+    let lettresVertJaunes = new Set();
+
+    for (let i = 0; i < MAX_ESSAIS; i++) {
+        for (let j = 0; j < LONGUEUR_MOT; j++) {
+            let lettre = grilleJeu[i][j];
+            if (!lettre) continue; 
+            
+            let caseDiv = document.getElementById(`case-${i}-${j}`);
+
+            if (caseDiv.classList.contains("pred-jaune") || caseDiv.classList.contains("pred-vert") || caseDiv.classList.contains("correct") || caseDiv.classList.contains("present")) {
+                lettresVertJaunes.add(lettre);
+            } else if (caseDiv.classList.contains("pred-rouge") || caseDiv.classList.contains("auto-rouge")) {
+                lettresRouges.add(lettre);
+            }
+        }
+    }
+
+    document.querySelectorAll("#clavier button").forEach(touche => {
+        let lettre = touche.getAttribute("data-key").toUpperCase();
+        if (lettre.length === 1) { 
+            if (lettresVertJaunes.has(lettre)) {
+                touche.classList.remove("assombrie");
+            } 
+            else if (lettresRouges.has(lettre)) {
+                touche.classList.add("assombrie");
+            } 
+            else {
+                touche.classList.remove("assombrie");
+            }
+        }
+    });
+}
+
 function gererTouche(touche) {
     if (jeuTermine || grilleVerrouillee) return;
-
     touche = normaliserMot(touche);
 
-    if (touche === "ENTER") {
-        validerMot();
-    } else if (touche === "BACKSPACE" || touche === "⌫") {
-        effacerLettre();
-    } else if (touche.length === 1 && lettreActuelle < LONGUEUR_MOT) {
-        ajouterLettre(touche);
-    }
+    if (touche === "ENTER") validerMot();
+    else if (touche === "BACKSPACE" || touche === "⌫") effacerLettre();
+    else if (touche.length === 1 && lettreActuelle < LONGUEUR_MOT) ajouterLettre(touche);
 }
 
 function effacerLettre() {
@@ -144,9 +177,9 @@ function ajouterLettre(lettre) {
     caseDiv.textContent = lettre;
     caseDiv.setAttribute("data-remplie", "true"); 
     
-    caseDiv.classList.add("pop");
-    setTimeout(() => caseDiv.classList.remove("pop"), 100);
-
+    caseDiv.style.transform = "scale(1.15)";
+    setTimeout(() => caseDiv.style.transform = "scale(1)", 150);
+    
     lettreActuelle++;
 }
 
@@ -158,8 +191,6 @@ function validerMot() {
     }
 
     const motSaisi = grilleJeu[essaiActuel].join("");
-
-    // SÉCURITÉ : Vérifie si le mot est dans le fichier JSON
     if (!dictionnaire.includes(motSaisi)) {
         afficherNotification("Ce mot n'est pas dans le dictionnaire");
         secouerLigneCourante();
@@ -175,12 +206,8 @@ function validerMot() {
         } else {
             essaiActuel++;
             lettreActuelle = 0;
-            
-            if (essaiActuel === MAX_ESSAIS) {
-                finDeJeu(false); 
-            } else {
-                grilleVerrouillee = false;
-            }
+            if (essaiActuel === MAX_ESSAIS) finDeJeu(false); 
+            else grilleVerrouillee = false;
         }
     }, 500);
 }
@@ -188,18 +215,14 @@ function validerMot() {
 function secouerLigneCourante() {
     const ligneDiv = document.getElementById(`ligne-${essaiActuel}`);
     ligneDiv.classList.remove("shake"); 
-    void ligneDiv.offsetWidth; // Astuce pour relancer l'animation
+    void ligneDiv.offsetWidth; 
     ligneDiv.classList.add("shake");
 }
 
-// --- 4. LOGIQUE MASTERMIND ---
 function verifierCouleurs(motSaisi) {
     const lettresSecretes = motSecret.split("");
     let motSaisiArray = motSaisi.split("");
-    
-    let nbVerts = 0;
-    let nbJaunes = 0;
-    let nbRouges = 0;
+    let nbVerts = 0, nbJaunes = 0, nbRouges = 0;
 
     for (let i = 0; i < LONGUEUR_MOT; i++) {
         if (motSaisiArray[i] === lettresSecretes[i]) {
@@ -221,7 +244,6 @@ function verifierCouleurs(motSaisi) {
         }
     }
 
-    // Mise à jour des indicateurs à droite
     document.getElementById(`ind-vert-${essaiActuel}`).textContent = nbVerts;
     document.getElementById(`ind-jaune-${essaiActuel}`).textContent = nbJaunes;
     document.getElementById(`ind-rouge-${essaiActuel}`).textContent = nbRouges;
@@ -229,14 +251,31 @@ function verifierCouleurs(motSaisi) {
     const ligneDiv = document.getElementById(`ligne-${essaiActuel}`);
     ligneDiv.classList.add("validee");
 
-    // Animation pop des lettres validées
+    let ligneTotalementFausse = (nbVerts === 0 && nbJaunes === 0);
+
     for (let i = 0; i < LONGUEUR_MOT; i++) {
         setTimeout(() => {
-            document.getElementById(`case-${essaiActuel}-${i}`).classList.add("pop");
+            let caseDiv = document.getElementById(`case-${essaiActuel}-${i}`);
+            caseDiv.style.transform = "scale(1.15)";
+            setTimeout(() => caseDiv.style.transform = "scale(1)", 150);
+
+            if (ligneTotalementFausse) {
+                let lettreFausse = motSaisiArray[i] || motSaisi[i];
+                for (let row = 0; row <= essaiActuel; row++) {
+                    for (let col = 0; col < LONGUEUR_MOT; col++) {
+                        if (grilleJeu[row][col] === lettreFausse) {
+                            let oldCase = document.getElementById(`case-${row}-${col}`);
+                            oldCase.classList.remove("pred-rouge", "pred-jaune", "pred-vert");
+                            oldCase.classList.add("auto-rouge");
+                        }
+                    }
+                }
+            }
         }, i * 100);
     }
 
-    // Animation pop des indicateurs
+    setTimeout(mettreAJourClavier, LONGUEUR_MOT * 100 + 50);
+
     const indicateurs = ligneDiv.querySelectorAll('.indicateur-carre');
     indicateurs.forEach((ind, index) => {
         setTimeout(() => {
@@ -246,17 +285,11 @@ function verifierCouleurs(motSaisi) {
     });
 }
 
-// --- 5. FIN DE JEU ET RÉVÉLATION ---
 function revelerToutesLesCases() {
-    const couleurs = {
-        "correct": "var(--couleur-correct)",
-        "present": "var(--couleur-present)",
-        "absent": "var(--couleur-absent)"
-    };
+    const couleurs = { "correct": "var(--couleur-correct)", "present": "var(--couleur-present)", "absent": "var(--couleur-absent)" };
 
     for (let i = 0; i < MAX_ESSAIS; i++) {
         const motLigne = grilleJeu[i].join("");
-        
         if (motLigne.length === LONGUEUR_MOT) {
             const lettresSecretes = motSecret.split("");
             const motSaisiArray = motLigne.split("");
@@ -265,11 +298,9 @@ function revelerToutesLesCases() {
             for (let j = 0; j < LONGUEUR_MOT; j++) {
                 if (motSaisiArray[j] === lettresSecretes[j]) {
                     resultats[j] = "correct";
-                    lettresSecretes[j] = null;
-                    motSaisiArray[j] = null;
+                    lettresSecretes[j] = null; motSaisiArray[j] = null;
                 }
             }
-            
             for (let j = 0; j < LONGUEUR_MOT; j++) {
                 if (motSaisiArray[j] !== null) {
                     const indexLettre = lettresSecretes.indexOf(motSaisiArray[j]);
@@ -279,26 +310,18 @@ function revelerToutesLesCases() {
                     }
                 }
             }
-            
             for (let j = 0; j < LONGUEUR_MOT; j++) {
                 const caseDiv = document.getElementById(`case-${i}-${j}`);
-                
-                caseDiv.classList.remove("pred-rouge", "pred-jaune", "pred-vert");
+                caseDiv.classList.remove("pred-rouge", "pred-jaune", "pred-vert", "auto-rouge");
                 const couleurFinale = couleurs[resultats[j]];
 
                 caseDiv.animate([
                     { transform: 'rotateX(0deg)' },
                     { transform: 'rotateX(90deg)', offset: 0.5, backgroundColor: 'transparent', borderColor: 'var(--bordure-remplie)' },
                     { transform: 'rotateX(0deg)', offset: 1, backgroundColor: couleurFinale, borderColor: couleurFinale, color: 'white' }
-                ], {
-                    duration: 600,
-                    fill: 'forwards',
-                    easing: 'ease-in-out'
-                });
+                ], { duration: 600, fill: 'forwards', easing: 'ease-in-out' });
 
-                setTimeout(() => {
-                    caseDiv.classList.add(resultats[j]); 
-                }, 600);
+                setTimeout(() => caseDiv.classList.add(resultats[j]), 600);
             }
         }
     }
@@ -306,7 +329,6 @@ function revelerToutesLesCases() {
 
 function finDeJeu(victoire) {
     jeuTermine = true;
-    
     revelerToutesLesCases();
     
     const clavier = document.getElementById("clavier");
@@ -334,14 +356,11 @@ function finDeJeu(victoire) {
     }
 
     setTimeout(() => {
-        clavier.classList.add("cache");
-        setTimeout(() => {
-            clavier.style.display = "none";
-            ecranFin.style.display = "flex";
-            setTimeout(() => {
-                ecranFin.classList.remove("cache");
-            }, 50);
-        }, 500); 
+        clavier.style.visibility = "hidden";
+        clavier.classList.add("cache"); 
+        
+        ecranFin.style.display = "flex";
+        setTimeout(() => ecranFin.classList.remove("cache"), 50);
     }, 1200);
 }
 
@@ -349,8 +368,5 @@ function afficherNotification(message) {
     const notif = document.getElementById("notification");
     notif.textContent = message;
     notif.classList.remove("cache");
-    
-    setTimeout(() => {
-        notif.classList.add("cache");
-    }, 2000);
+    setTimeout(() => notif.classList.add("cache"), 2000);
 }

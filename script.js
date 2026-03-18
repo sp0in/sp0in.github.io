@@ -177,8 +177,6 @@ function ajouterLettre(lettre) {
     caseDiv.textContent = lettre;
     caseDiv.setAttribute("data-remplie", "true"); 
     
-    caseDiv.style.transform = "scale(1.15)";
-    setTimeout(() => caseDiv.style.transform = "scale(1)", 150);
     
     lettreActuelle++;
 }

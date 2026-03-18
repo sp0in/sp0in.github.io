@@ -52,9 +52,14 @@ header {
 #logo-site {
     height: clamp(60px, 12vh, 90px);
     width: auto;
+    cursor: pointer;
+    transition: transform 0.2s;
+    
+    filter: invert(1); 
+}
 
-    filter: brightness(1.5) contrast(1.5) invert(1);
-    mix-blend-mode: screen;
+#logo-site:active {
+    transform: scale(0.9);
 }
 
 #grille {
@@ -345,9 +350,43 @@ button.touche-large {
     transform: scale(0.9);
 }
 
+
 button.assombrie {
     background-color: #222222;
     color: #555555;
     opacity: 0.5;
     transition: background-color 0.3s, opacity 0.3s;
+}
+
+.case.auto-rouge {
+    background-color: #a04040 !important;
+    border-color: #a04040 !important;
+    color: white !important;
+    cursor: not-allowed !important;
+}
+
+.case {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+button, .case, #logo-site {
+    touch-action: manipulation;
+}
+
+#clavier button {
+    user-select: none;
+    -webkit-user-select: none;
+    
+    transition: transform 0.1s ease, background-color 0.2s, opacity 0.2s;
+}
+
+#clavier button:active {
+    transform: scale(0.90);
+}
+
+.indicateur-carre {
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
 }

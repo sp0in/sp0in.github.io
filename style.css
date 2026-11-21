@@ -663,6 +663,11 @@ main {
     color: var(--couleur-texte);
 }
 
+#a-propos a {
+    color: var(--couleur-correct);
+    font-weight: bold;
+}
+
 #a-propos .pied-de-page {
     margin-top: 28px;
     font-size: 13px;
@@ -677,4 +682,187 @@ main {
     overflow: hidden;
     clip: rect(0 0 0 0);
     white-space: nowrap;
+}
+
+/* --- 12. PAGE « MOTS DE 5 LETTRES » --- */
+.outil {
+    max-width: 680px;
+    padding: 20px 18px 10px;
+    align-items: stretch;
+    line-height: 1.5;
+}
+
+.outil h1 {
+    text-align: center;
+    font-size: clamp(26px, 5vw, 34px);
+    margin-bottom: 8px;
+}
+
+.outil h2 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.outil a {
+    color: var(--couleur-correct);
+    font-weight: bold;
+}
+
+.outil .intro {
+    text-align: center;
+    color: var(--couleur-texte-doux);
+    margin-bottom: 22px;
+}
+
+.outil .aide {
+    color: var(--couleur-texte-doux);
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.filtres, .resultats, .cta-jeu {
+    background-color: var(--couleur-en-tete);
+    border: 1px solid var(--bordure-vide);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.filtre {
+    margin-bottom: 18px;
+}
+
+.cases-saisie {
+    display: flex;
+    gap: 6px;
+}
+
+.cases-saisie input,
+.saisie-longue {
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    border: 2px solid var(--bordure-remplie);
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 22px;
+    text-transform: uppercase;
+    text-align: center;
+    outline: none;
+}
+
+.cases-saisie input {
+    width: 54px;
+    height: 54px;
+    min-width: 0;
+    flex: 0 1 54px;
+}
+
+#saisie-jaunes input {
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+
+#saisie-vertes input:focus { border-color: var(--couleur-correct); }
+#saisie-jaunes input:focus { border-color: var(--couleur-present); }
+.saisie-longue:focus { border-color: var(--couleur-rouge); }
+
+.saisie-longue {
+    width: 100%;
+    max-width: 300px;
+    height: 46px;
+    letter-spacing: 3px;
+}
+
+#resultats-liste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+.mot-resultat {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--bordure-vide);
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 15px;
+}
+
+.mot-resultat.courant {
+    background-color: var(--couleur-correct);
+}
+
+.cta-jeu {
+    text-align: center;
+}
+
+.cta-jeu h2 {
+    justify-content: center;
+}
+
+.cta-jeu p {
+    color: var(--couleur-texte-doux);
+    margin-bottom: 14px;
+}
+
+.cta-jeu .btn-action {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+}
+
+.texte-seo {
+    color: var(--couleur-texte-doux);
+    padding: 10px 2px;
+}
+
+.texte-seo h2 {
+    color: var(--couleur-texte);
+    margin-top: 22px;
+}
+
+.texte-seo h3 {
+    color: var(--couleur-texte);
+    font-size: 15px;
+    margin: 16px 0 4px;
+}
+
+.texte-seo strong {
+    color: var(--couleur-texte);
+}
+
+.texte-seo p {
+    margin-bottom: 10px;
+}
+
+.liste-depart {
+    font-size: 17px;
+    letter-spacing: 1px;
+}
+
+.liste-mots {
+    font-size: 14px;
+    word-spacing: 4px;
+    letter-spacing: 0.5px;
+}
+
+.pied-outil {
+    text-align: center;
+    padding: 24px 16px 30px;
+    color: var(--couleur-texte-doux);
+    font-size: 13px;
+}
+
+.pied-outil a {
+    display: inline-block;
+    color: var(--couleur-correct);
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px;
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wordspoon : jeu de mots en 5 lettres, un Wordle en mode extrême</title>
-    <meta name="description" content="Wordspoon est un jeu de mots gratuit en français, inspiré de Wordle, en version difficile : trouvez le mot de 5 lettres en 8 essais sans couleurs, uniquement avec des indices chiffrés. Un mot du jour et des parties illimitées.">
+    <meta name="description" content="Wordspoon, le Word500 en français : un jeu de mots gratuit inspiré de Wordle, en version difficile. Trouvez le mot de 5 lettres en 8 essais sans couleurs, uniquement avec des indices chiffrés. Un mot du jour et des parties illimitées.">
     <link rel="canonical" href="https://sp0in.github.io/">
     <meta name="theme-color" content="#121213">
 
@@ -39,7 +39,8 @@
     }
     </script>
 
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="style.css">
 
     <!-- Compteur de visites GoatCounter (sans cookies). Compte : sp0in.goatcounter.com -->
@@ -54,7 +55,7 @@
         <div class="entete-cote">
             <button id="btn-aide" class="btn-icone" aria-label="Comment jouer" title="Comment jouer">?</button>
         </div>
-        <img src="logo.png" alt="Logo Wordspoon" id="logo-site" title="Effacer mes annotations">
+        <img src="logo.png" alt="Logo Wordspoon" id="logo-site" width="256" height="256" title="Effacer mes annotations">
         <div class="entete-cote droite">
             <button id="btn-stats" class="btn-icone" aria-label="Statistiques" title="Statistiques">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
@@ -136,7 +137,7 @@
     <!-- Présentation du jeu : utile aux joueurs qui défilent et aux moteurs de recherche -->
     <footer id="a-propos">
         <h2>Wordspoon, le jeu de mots en 5 lettres pour les experts</h2>
-        <p>Wordspoon est un jeu de lettres gratuit en français, inspiré de Wordle et du Mastermind. Le principe est le même : deviner un mot de 5 lettres. La différence : <strong>les cases ne se colorent jamais</strong> pendant la partie. Après chaque essai, vous savez seulement combien de lettres sont bien placées, mal placées ou absentes. À vous de déduire lesquelles !</p>
+        <p>Wordspoon est un jeu de lettres gratuit en français, inspiré de Wordle et du Mastermind. C'est l'équivalent français de <strong>Word500</strong> : le principe vient du vieux jeu « Bulls and Cows » (taureaux et vaches). Comme dans Wordle, il faut deviner un mot de 5 lettres. La différence : <strong>les cases ne se colorent jamais</strong> pendant la partie. Après chaque essai, vous savez seulement combien de lettres sont bien placées, mal placées ou absentes. À vous de déduire lesquelles !</p>
 
         <h3>Comment jouer ?</h3>
         <p>Tapez un mot de 5 lettres et validez. Trois compteurs apparaissent à droite : vert pour les lettres bien placées, jaune pour les lettres présentes mais mal placées, rouge pour les lettres absentes. Touchez les cases pour noter vos déductions. Vous avez 8 essais pour trouver le mot.</p>
@@ -147,7 +148,10 @@
         <h3>Wordspoon est-il plus difficile que Wordle ?</h3>
         <p>Oui. Sans couleurs sur les lettres, chaque essai demande plus de réflexion : c'est un vrai casse-tête de logique. C'est pour ça que vous avez 8 essais au lieu de 6.</p>
 
-        <p class="pied-de-page">Wordspoon est un projet personnel, gratuit et sans publicité. Il n'est pas affilié à Wordle ni au New York Times.</p>
+        <h3>Besoin d'un coup de pouce ?</h3>
+        <p>Notre outil <a href="mots-5-lettres.html">Mots de 5 lettres</a> trouve tous les mots possibles à partir des lettres que vous connaissez. Il marche aussi pour Wordle, Le Mot ou Sutom.</p>
+
+        <p class="pied-de-page">Wordspoon est un projet personnel, gratuit et sans publicité. Il n'est pas affilié à Wordle, au New York Times ni à Word500.</p>
     </footer>
 
     <!-- Fenêtre : Comment jouer -->

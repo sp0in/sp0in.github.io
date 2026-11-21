@@ -2,157 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mots de 5 lettres : outil gratuit pour trouver le mot (Wordle, Le Mot, Sutom)</title>
-    <meta name="description" content="Trouvez tous les mots de 5 lettres possibles en français à partir des lettres bien placées, mal placées et absentes. Outil gratuit d'aide pour Wordle, Le Mot, Sutom et Wordspoon, avec les meilleurs mots pour commencer.">
-    <link rel="canonical" href="https://sp0in.github.io/mots-5-lettres.html">
-    <meta name="theme-color" content="#121213">
-
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Wordspoon">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="og:url" content="https://sp0in.github.io/mots-5-lettres.html">
-    <meta property="og:title" content="Mots de 5 lettres : trouvez le mot en quelques secondes">
-    <meta property="og:description" content="Indiquez les lettres que vous connaissez, l'outil vous donne tous les mots possibles.">
-    <meta property="og:image" content="https://sp0in.github.io/apercu.png">
-    <meta name="twitter:card" content="summary_large_image">
-
-    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="stylesheet" href="style.css">
-
-    <script data-goatcounter="https://sp0in.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+    <title>Wordspoon a déménagé</title>
+    <!-- Wordspoon a déménagé : cette page renvoie vers la nouvelle adresse -->
+    <link rel="canonical" href="https://wordspoon.github.io/mots-5-lettres.html">
+    <meta name="robots" content="noindex, follow">
+    <meta http-equiv="refresh" content="0; url=https://wordspoon.github.io/mots-5-lettres.html">
+    <script>
+        // Garde le chemin de la page demandée (utile pour 404.html)
+        location.replace("https://wordspoon.github.io" + "/mots-5-lettres.html" + location.search + location.hash);
+    </script>
+    <style>body{background:#121213;color:#fff;font-family:Arial,sans-serif;text-align:center;padding:60px 20px}a{color:#538d4e}</style>
 </head>
-<body class="page-outil">
-
-    <header>
-        <div class="entete-cote"></div>
-        <a href="./" title="Jouer à Wordspoon"><img src="logo.png" alt="Logo Wordspoon" id="logo-site" width="256" height="256"></a>
-        <div class="entete-cote droite"></div>
-    </header>
-
-    <main class="outil">
-        <h1>Mots de 5 lettres</h1>
-        <p class="intro">Indiquez ce que vous savez du mot : l'outil affiche tous les mots de 5 lettres possibles. Pratique pour <strong>Wordle</strong>, <strong>Le Mot</strong>, <strong>Sutom</strong>… et pour <a href="./">Wordspoon</a>, notre Wordle en mode extrême.</p>
-
-        <section class="filtres" aria-label="Lettres connues">
-            <div class="filtre">
-                <h2><span class="pastille vert"></span> Lettres bien placées</h2>
-                <p class="aide">Une lettre par case, à sa position.</p>
-                <div class="cases-saisie" id="saisie-vertes">
-                    <input maxlength="1" aria-label="Lettre 1" autocomplete="off" autocapitalize="characters">
-                    <input maxlength="1" aria-label="Lettre 2" autocomplete="off" autocapitalize="characters">
-                    <input maxlength="1" aria-label="Lettre 3" autocomplete="off" autocapitalize="characters">
-                    <input maxlength="1" aria-label="Lettre 4" autocomplete="off" autocapitalize="characters">
-                    <input maxlength="1" aria-label="Lettre 5" autocomplete="off" autocapitalize="characters">
-                </div>
-            </div>
-
-            <div class="filtre">
-                <h2><span class="pastille jaune"></span> Lettres présentes mais mal placées</h2>
-                <p class="aide">Sous chaque position, les lettres qui sont dans le mot mais <em>pas</em> à cette place (plusieurs lettres possibles).</p>
-                <div class="cases-saisie" id="saisie-jaunes">
-                    <input aria-label="Pas en position 1" autocomplete="off" autocapitalize="characters">
-                    <input aria-label="Pas en position 2" autocomplete="off" autocapitalize="characters">
-                    <input aria-label="Pas en position 3" autocomplete="off" autocapitalize="characters">
-                    <input aria-label="Pas en position 4" autocomplete="off" autocapitalize="characters">
-                    <input aria-label="Pas en position 5" autocomplete="off" autocapitalize="characters">
-                </div>
-            </div>
-
-            <div class="filtre">
-                <h2><span class="pastille rouge"></span> Lettres absentes</h2>
-                <p class="aide">Toutes les lettres qui ne sont pas dans le mot.</p>
-                <input id="saisie-absentes" class="saisie-longue" placeholder="ex. : SNPU" aria-label="Lettres absentes" autocomplete="off" autocapitalize="characters">
-            </div>
-
-            <button id="btn-effacer" class="btn-action secondaire">Tout effacer</button>
-        </section>
-
-        <section class="resultats" aria-live="polite">
-            <h2 id="resultats-titre">Mots possibles</h2>
-            <p class="aide">Les mots <strong>courants</strong> s'affichent en premier, en vert.</p>
-            <div id="resultats-liste"></div>
-            <button id="btn-plus" class="btn-action secondaire invisible">Afficher plus de mots</button>
-        </section>
-
-        <section class="cta-jeu">
-            <h2>Envie d'un vrai défi ?</h2>
-            <p>Dans <strong>Wordspoon</strong>, les cases ne se colorent jamais : vous savez seulement <em>combien</em> de lettres sont bien placées, mal placées ou absentes. C'est le Word500 en français, avec un nouveau mot chaque jour.</p>
-            <a class="btn-action" href="./">Jouer à Wordspoon</a>
-        </section>
-
-        <article class="texte-seo">
-            <h2>Les meilleurs mots de 5 lettres pour commencer</h2>
-            <p>Pour bien démarrer, choisissez un premier mot avec 5 lettres différentes, parmi les plus fréquentes du français. D'après les mots courants de 5 lettres, les lettres qui reviennent le plus sont <strong>E, R, A, I, O, T, L et N</strong>. Les meilleurs mots de départ sont donc :</p>
-            <p class="liste-depart"><strong>TAIRE</strong> · <strong>ORALE</strong> · <strong>CRAIE</strong> · <strong>PAIRE</strong> · <strong>NOIRE</strong> · <strong>CARTE</strong> · <strong>ANTRE</strong> · <strong>LAINE</strong> · <strong>LITRE</strong> · <strong>RAIDE</strong></p>
-            <p>Un bon deuxième mot utilise 5 autres lettres fréquentes. Par exemple, après TAIRE, essayez <strong>CLOUS</strong> ou <strong>PLOMB</strong> pour tester L, O, U, C, S ou P.</p>
-
-            <h2>Comment utiliser cet outil ?</h2>
-            <p>Après chaque essai dans votre jeu, reportez les indices. Une lettre <strong>verte</strong> (bien placée) va dans la case de sa position. Une lettre <strong>jaune</strong> (présente mais mal placée) va sous la position où vous l'avez jouée. Une lettre <strong>grise</strong> (absente) va dans le champ des lettres absentes. La liste des mots possibles se met à jour toute seule. Les accents sont ignorés : É, È et Ê comptent comme un E.</p>
-
-            <h2>Liste des mots courants de 5 lettres</h2>
-            <p>Voici les 1021 mots courants de 5 lettres utilisés comme mots à deviner dans Wordspoon, classés par première lettre. L'outil ci-dessus cherche aussi parmi 6 022 mots acceptés au total.</p>
-            <h3>Mots de 5 lettres commençant par A</h3>
-            <p class="liste-mots">ABCES ABIME ACCES ACHAT ACIDE ACIER ACTIF ADAGE ADIEU AGENT AGILE AIDER AIGLE AIMER AINEE AISEE AJOUT ALBUM ALGUE ALIAS ALIBI ALIEN ALLEE ALLER ALPIN AMANT AMBRE AMERE AMONT AMOUR AMPLE ANCRE ANGLE ANNEE ANTRE APERO APNEE APPAT APPEL APPLI APPUI ARBRE ARCHE ARENE ARETE ARGOT ARIDE ARMEE ARMER AROME ARRET ASILE ASTRE ATHEE ATLAS ATOME ATOUT AUDIO AUDIT AUTEL AUTRE AVARE AVIDE AVION AVOIR AVRIL</p>
-            <h3>Mots de 5 lettres commençant par B</h3>
-            <p class="liste-mots">BACHE BACON BADGE BAGNE BAGUE BALAI BALLE BANAL BANDE BARBE BARBU BARIL BARON BARRE BASSE BATIR BATON BAUME BAZAR BEIGE BELLE BEMOL BENIR BENNE BERET BERGE BETON BIAIS BICHE BIDON BIERE BIJOU BILAN BILLE BINGO BISON BISOU BLAME BLANC BLEUE BLOND BLUES BLUFF BOCAL BOEUF BOIRE BOITE BOMBE BONNE BONTE BONUS BORNE BOSSE BOTTE BOUEE BOULE BOURG BRAVE BRAVO BREAK BREVE BRIDE BRISE BRUIT BRUME BRUNE BRUTE BUCHE BULBE BULLE BUSTE BUTER BUTIN BUTTE</p>
-            <h3>Mots de 5 lettres commençant par C</h3>
-            <p class="liste-mots">CABLE CACAO CADET CADRE CALIN CALME CANAL CANNE CANOE CANON CANOT CAPOT CARGO CARPE CARRE CARTE CASER CASSE CASTE CATCH CAUSE CEDER CEDRE CHAIR CHAMP CHANT CHAOS CHAUD CHENE CHERE CHERI CHIEN CHILI CHIOT CHIPS CHOIX CHOSE CHUTE CIBLE CIDRE CITER CIVIL CLAIR CLASH CLONE CLORE CLOWN COACH COBRA COCHE COCON COEUR COLIS COLLE COLON COLZA COMBO COMTE CONGE CONTE COPIE COQUE CORDE CORNE CORPS COTON COUDE COUPE COURS COURT CRABE CRAIE CRANE CRASH CREDO CREER CREME CREPE CRETE CREUX CRIER CRIME CRISE CROIX CRUEL CUIRE CUITE CULOT CULTE CUMUL CURRY CYCLE CYGNE</p>
-            <h3>Mots de 5 lettres commençant par D</h3>
-            <p class="liste-mots">DALLE DANDY DANSE DATER DEBAT DEBIT DEBUT DECES DECOR DEGAT DEGRE DELAI DELIT DELTA DEMIE DEMON DENSE DEPIT DEPOT DERBY DESIR DETTE DEUIL DEVIN DEVIS DIETE DIGNE DIGUE DINDE DINER DISCO DIVAN DIVIN DOGME DOIGT DOSER DOTER DOUCE DOUTE DOUZE DOYEN DRAME DROIT DROLE DRONE DUPER DUREE DURER DUVET</p>
-            <h3>Mots de 5 lettres commençant par E</h3>
-            <p class="liste-mots">EBENE ECART ECHEC ECLAT ECOLE ECOLO ECRAN ECRIN ECRIT ECUME EFFET EGALE EGOUT ELEVE ELIRE ELITE ELOGE EMAIL ENCRE ENFER ENGIN ENJEU ENNUI ENVIE ENVOI ENVOL EPAIS EPAVE EPICE EPINE EPOUX ERRER ESSAI ESSOR ETAGE ETANG ETAPE ETUDE EVEIL EVIER EXACT EXCES EXODE</p>
-            <h3>Mots de 5 lettres commençant par F</h3>
-            <p class="liste-mots">FABLE FACON FAIRE FARCE FASTE FATAL FAUNE FAUTE FAUVE FELIN FEMME FEMUR FENTE FERME FERRY FETER FIBRE FICHE FICHU FIERE FILER FILET FILLE FILON FINAL FINIR FIRME FIXER FLAIR FLANC FLASH FLEAU FLEUR FLIRT FLORE FLUTE FOCUS FOIRE FOLIE FOLLE FONDS FONTE FORCE FORET FORGE FORME FORTE FORUM FOSSE FOUET FOULE FOYER FRAIS FRANC FREIN FRELE FRENE FRERE FRIGO FRISE FRITE FROID FRONT FRUIT FUGUE FUITE FUMEE FUMER FURET FURIE FUSEE FUSIL FUTUR</p>
-            <h3>Mots de 5 lettres commençant par G</h3>
-            <p class="liste-mots">GAFFE GAINE GALOP GAMIN GAMME GARDE GARER GATER GAZON GEANT GELEE GELER GENER GENIE GENOU GENRE GERBE GERER GERME GESTE GIFLE GILET GLACE GLAND GLOBE GNOME GOLFE GOMME GORGE GOSSE GRACE GRADE GRAIN GRAND GRAVE GRELE GREVE GRISE GUEPE GUIDE GUISE</p>
-            <h3>Mots de 5 lettres commençant par H</h3>
-            <p class="liste-mots">HABIT HACHE HAINE HALLE HALTE HARAS HARPE HAUTE HAVRE HEBDO HERBE HEROS HETRE HEURE HIBOU HIVER HOBBY HOMME HONTE HORDE HOTEL HOULE HUILE HYMNE</p>
-            <h3>Mots de 5 lettres commençant par I</h3>
-            <p class="liste-mots">ICONE IDEAL IDIOT IDOLE IMAGE IMPOT IMPUR INDEX INTRO ISSUE</p>
-            <h3>Mots de 5 lettres commençant par J</h3>
-            <p class="liste-mots">JAMBE JARRE JAUGE JAUNE JEANS JETEE JETER JEUDI JEUNE JOINT JOKER JOLIE JOUER JOUET JOUIR JOUTE JOYAU JUGER JURER JUSTE</p>
-            <h3>Mots de 5 lettres commençant par K</h3>
-            <p class="liste-mots">KARMA KAYAK KEBAB KOALA</p>
-            <h3>Mots de 5 lettres commençant par L</h3>
-            <p class="liste-mots">LABEL LACET LACHE LAGON LAIDE LAINE LAMPE LANCE LANDE LAPIN LAQUE LARGE LARME LARVE LASER LASSE LATEX LATIN LAVER LECON LEGAL LEGER LENTE LEVER LEVRE LIBRE LIEGE LIGNE LIGUE LILAS LINGE LISSE LISTE LITRE LIVRE LOBBY LOCAL LOGER LOTUS LOUER LOUPE LOURD LOUVE LOYAL LOYER LUEUR LUNDI LUTIN LUTTE LYCEE</p>
-            <h3>Mots de 5 lettres commençant par M</h3>
-            <p class="liste-mots">MACON MAFIA MAGIE MAGMA MAIRE MAJOR MALIN MALLE MAMAN MAMIE MANGA MANIE MANNE MARDI MAREE MARGE MARIN MARRE MASSE MATCH MATER MATIN MAUVE MECHE MEDIA MELEE MELER MELON MENER MERCI MERLE MESSE METAL METEO METIS METRE METRO MEULE MEUTE MILLE MINCE MINER MISER MIXTE MOCHE MOINE MOLLE MOMIE MONDE MORAL MORNE MORTE MORUE MOTEL MOTIF MOTTE MOULE MOYEN MUNIR MUSEE MYTHE</p>
-            <h3>Mots de 5 lettres commençant par N</h3>
-            <p class="liste-mots">NAGER NAINE NAIVE NAPPE NATAL NATIF NAVAL NAVET NEANT NEIGE NETTE NEUVE NEVEU NIAIS NICHE NIECE NINJA NOBLE NOCIF NOEUD NOIRE NONNE NORME NOTER NOUER NOYAU NOYER NUAGE NUIRE NULLE NUQUE</p>
-            <h3>Mots de 5 lettres commençant par O</h3>
-            <p class="liste-mots">OASIS OBEIR OBESE OBJET OCEAN ODEUR OFFRE OLIVE OMBRE ONCLE ONGLE OPERA OPIUM OPTER ORAGE ORALE ORDRE ORGUE OTAGE OUBLI OUEST OUTIL OVALE OZONE</p>
-            <h3>Mots de 5 lettres commençant par P</h3>
-            <p class="liste-mots">PACHA PACTE PAIEN PAIRE PALME PANDA PANEL PANNE PARER PAROI PARTI PASSE PATIN PATIO PATTE PAUME PAUSE PAYER PEAGE PECHE PEINE PELLE PENAL PENTE PERIL PERIR PERLE PERTE PESER PESTE PETIT PHARE PHASE PHILO PHOTO PIANO PIECE PIEGE PIEUX PILON PINCE PINTE PIQUE PISTE PITIE PITRE PIVOT PIXEL PIZZA PLACE PLAGE PLAID PLAIE PLANT PLATE PLEIN PLIER PLOMB PLUIE PLUME POCHE POELE POEME POETE POIDS POILU POING POINT POIRE POKER POLAR POMME POMPE PONEY PONTE PORTE POSER POSTE POUCE POULE POULS POUPE PRIER PRIME PRISE PRIVE PROIE PROMO PROSE PROUE PRUNE PUITS PULPE PUNCH PUNIR PUREE PURGE</p>
-            <h3>Mots de 5 lettres commençant par Q</h3>
-            <p class="liste-mots">QUART QUETE QUEUE QUOTA</p>
-            <h3>Mots de 5 lettres commençant par R</h3>
-            <p class="liste-mots">RADAR RADIN RADIO RADIS RAFLE RAIDE RAMPE RANCE RANCH RASER RATER RATIO RATON RAVIN RAVIR RAYER RAYON RECIF RECIT RECTO RECUL REFUS REGAL REGIE REGLE REGNE REINE REJET RELAX RENOM RENTE REPAS REPIT REPLI REPOS RESTE RESTO RETRO REVER REVUE RHUME RICHE RISEE RIVAL ROBOT ROCHE ROMAN RONDE ROSEE ROUGE ROUTE ROYAL RUBAN RUBIS RUCHE RUGBY RUINE RURAL</p>
-            <h3>Mots de 5 lettres commençant par S</h3>
-            <p class="liste-mots">SABLE SABOT SABRE SACRE SAINE SAINT SALIR SALLE SALON SALSA SALUT SALVE SAMBA SANTE SAPER SAPIN SATIN SAUCE SAULE SAUNA SAVON SCEAU SCENE SCOOP SCORE SECHE SECTE SEIZE SELLE SEMER SENAT SERIE SERRE SEUIL SEULE SEVIR SHORT SIEGE SIGLE SIGNE SILEX SINGE SIROP SKATE SNACK SOBRE SOCLE SOEUR SOLDE SOMME SONDE SONGE SORTE SOSIE SOUCI SOUPE SOURD SOUTE SPORT STADE STAGE STAND STEAK STOCK STORE STYLE STYLO SUBIR SUCRE SUEUR SUITE SUJET SUSHI SYMPA</p>
-            <h3>Mots de 5 lettres commençant par T</h3>
-            <p class="liste-mots">TABAC TABLE TABOU TACHE TAIRE TALON TALUS TANGO TANTE TAPER TAPIS TARIF TAROT TARTE TASSE TAUPE TAXER TEINT TEMPE TEMPO TEMPS TENIR TENOR TENTE TENUE TERME TERNE TERRE TEXTE TEXTO THEME THESE TIBIA TIEDE TIERS TIGRE TIQUE TIRER TISSU TITAN TITRE TOAST TOILE TOMBE TONNE TORSE TOTAL TOTEM TRACE TRACT TRAIN TRAIT TRAME TREVE TRIBU TRIER TROLL TRONC TRONE TUEUR TUILE TULLE TURBO TUYAU TWIST TYRAN</p>
-            <h3>Mots de 5 lettres commençant par U</h3>
-            <p class="liste-mots">UNION UNITE USAGE USINE USUEL USURE UTILE</p>
-            <h3>Mots de 5 lettres commençant par V</h3>
-            <p class="liste-mots">VACHE VAGUE VAINE VALET VALSE VALVE VANNE VASTE VEINE VENIN VENIR VENTE VENUE VERBE VERRE VERSE VERSO VERTE VERTU VERVE VESTE VEUVE VEXER VIDEO VIDER VIEUX VIGNE VILLA VILLE VINGT VIRAL VIRER VIRIL VIRUS VISER VITAL VITRE VIVRE VOCAL VODKA VOGUE VOILE VOLER VOLET VOMIR VOTER VOUTE VOYOU VRAIE</p>
-            <h3>Mots de 5 lettres commençant par W</h3>
-            <p class="liste-mots">WAGON</p>
-            <h3>Mots de 5 lettres commençant par Y</h3>
-            <p class="liste-mots">YACHT</p>
-            <h3>Mots de 5 lettres commençant par Z</h3>
-            <p class="liste-mots">ZEBRE</p>
-        </article>
-    </main>
-
-    <footer class="pied-outil">
-        <a href="./">← Retour au jeu Wordspoon</a>
-        <p>Wordspoon est un projet personnel, gratuit et sans publicité. Il n'est pas affilié à Wordle, au New York Times ni à Word500.</p>
-    </footer>
-
-    <script src="mots.js"></script>
-    <script src="solutions.js"></script>
-    <script src="outil-mots.js"></script>
+<body>
+    <p>Wordspoon a déménagé : <a href="https://wordspoon.github.io/mots-5-lettres.html">wordspoon.github.io</a></p>
 </body>
 </html>

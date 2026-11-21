@@ -4,20 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wordspoon</title>
+    <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <img src="logo.png" alt="Logo Wordspoon" id="logo-site">
+        <div class="entete-cote">
+            <button id="btn-aide" class="btn-icone" aria-label="Comment jouer" title="Comment jouer">?</button>
+        </div>
+        <img src="logo.png" alt="Logo Wordspoon" id="logo-site" title="Effacer mes annotations">
+        <div class="entete-cote droite">
+            <button id="btn-stats" class="btn-icone" aria-label="Statistiques" title="Statistiques">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                    <path d="M5 20V12"/><path d="M12 20V5"/><path d="M19 20v-9"/>
+                </svg>
+            </button>
+        </div>
     </header>
 
+    <nav id="choix-mode" aria-label="Mode de jeu">
+        <button data-mode="jour">Mot du jour</button>
+        <button data-mode="libre">Partie libre</button>
+    </nav>
+
     <main>
-        <div id="grille">
-        </div>
+        <div id="grille"></div>
 
         <div id="zone-bas">
-            
+
             <div id="clavier" class="transition-fondue">
                 <div class="ligne-clavier">
                     <button data-key="a">A</button>
@@ -31,7 +46,7 @@
                     <button data-key="o">O</button>
                     <button data-key="p">P</button>
                 </div>
-                
+
                 <div class="ligne-clavier">
                     <button data-key="q">Q</button>
                     <button data-key="s">S</button>
@@ -44,9 +59,9 @@
                     <button data-key="l">L</button>
                     <button data-key="m">M</button>
                 </div>
-                
+
                 <div class="ligne-clavier">
-                    <button data-key="Enter" class="touche-large">
+                    <button data-key="Enter" class="touche-large" aria-label="Valider">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 10l-5 5 5 5"/>
                             <path d="M20 4v7a4 4 0 0 1-4 4H4"/>
@@ -58,24 +73,73 @@
                     <button data-key="v">V</button>
                     <button data-key="b">B</button>
                     <button data-key="n">N</button>
-                    <button data-key="Backspace" class="touche-large">⌫</button>
+                    <button data-key="Backspace" class="touche-large" aria-label="Effacer">⌫</button>
                 </div>
             </div>
 
-            <div id="ecran-fin" class="transition-fondue cache" style="display: none;">
+            <div id="ecran-fin" class="transition-fondue cache invisible">
                 <h2 id="fin-titre"></h2>
                 <p id="fin-texte"></p>
-                
                 <div id="fin-mot-secret" class="lettres"></div>
-                
-                <button id="btn-rejouer" onclick="location.reload()">Rejouer</button>
+                <p id="fin-compte-a-rebours"></p>
+                <div class="fin-boutons">
+                    <button id="btn-partager" class="btn-action">Partager</button>
+                    <button id="btn-rejouer" class="btn-action secondaire">Rejouer</button>
+                </div>
             </div>
 
-        </div> </main>
+        </div>
+    </main>
 
-    <script src="script.js"></script>
+    <!-- Fenêtre : Comment jouer -->
+    <div id="modale-aide" class="modale invisible" role="dialog" aria-modal="true" aria-labelledby="titre-aide">
+        <div class="modale-contenu">
+            <button class="modale-fermer" aria-label="Fermer">×</button>
+            <h2 id="titre-aide">Comment jouer</h2>
+            <p>Trouvez le mot de <strong>5 lettres</strong> en <strong>8 essais</strong>.</p>
+            <p><strong>Mode extrême :</strong> les cases ne se colorent pas pendant la partie. À droite de chaque essai, trois compteurs vous donnent seulement des nombres :</p>
+            <div class="exemple-ligne">
+                <span class="exemple-lettres">
+                    <span class="case mini">P</span><span class="case mini">O</span><span class="case mini">M</span><span class="case mini">M</span><span class="case mini">E</span>
+                </span>
+                <span class="indicateur-carre ind-vert mini">1</span>
+                <span class="indicateur-carre ind-jaune mini">2</span>
+                <span class="indicateur-carre ind-rouge mini">2</span>
+            </div>
+            <ul>
+                <li><span class="pastille vert"></span><span>lettres <strong>bien placées</strong></span></li>
+                <li><span class="pastille jaune"></span><span>lettres <strong>présentes mais mal placées</strong></span></li>
+                <li><span class="pastille rouge"></span><span>lettres <strong>absentes</strong> du mot</span></li>
+            </ul>
+            <p>À vous de déduire lesquelles ! <strong>Touchez une case</strong> d'un essai validé pour l'annoter : rouge → jaune → vert → vide. Les lettres que vous marquez en rouge s'assombrissent sur le clavier.</p>
+            <p>Si un essai n'a <strong>aucun vert ni jaune</strong>, ses lettres passent automatiquement en rouge partout.</p>
+            <p>Touchez le <strong>logo</strong> pour effacer vos annotations.</p>
+            <p><strong>Mot du jour :</strong> le même mot pour tout le monde, un nouveau chaque jour à minuit.<br><strong>Partie libre :</strong> autant de parties que vous voulez.</p>
+            <button class="btn-action modale-ok">C'est parti !</button>
+        </div>
+    </div>
+
+    <!-- Fenêtre : Statistiques -->
+    <div id="modale-stats" class="modale invisible" role="dialog" aria-modal="true" aria-labelledby="titre-stats">
+        <div class="modale-contenu">
+            <button class="modale-fermer" aria-label="Fermer">×</button>
+            <h2 id="titre-stats">Statistiques</h2>
+            <p id="stats-mode" class="sous-titre"></p>
+            <div class="stats-chiffres">
+                <div><span id="stat-jouees">0</span><small>Parties</small></div>
+                <div><span id="stat-pourcent">0</span><small>% victoires</small></div>
+                <div><span id="stat-serie">0</span><small>Série actuelle</small></div>
+                <div><span id="stat-meilleure">0</span><small>Meilleure série</small></div>
+            </div>
+            <h3>Répartition des essais</h3>
+            <div id="stats-repartition"></div>
+        </div>
+    </div>
 
     <div id="notification" class="notification cache"></div>
 
+    <script src="mots.js"></script>
+    <script src="solutions.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

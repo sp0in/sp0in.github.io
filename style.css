@@ -126,6 +126,15 @@ header {
 }
 
 /* --- 5. GRILLE --- */
+#ecran-jeu {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -624,4 +633,48 @@ main {
         height: 28px;
         font-size: 14px;
     }
+}
+
+/* --- 11. PRÉSENTATION (bas de page) --- */
+#a-propos {
+    width: 100%;
+    max-width: 640px;
+    padding: 40px 20px 30px;
+    margin-top: 30px;
+    border-top: 1px solid var(--bordure-vide);
+    color: var(--couleur-texte-doux);
+    line-height: 1.55;
+    font-size: 15px;
+}
+
+#a-propos h2 {
+    color: var(--couleur-texte);
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+#a-propos h3 {
+    color: var(--couleur-texte);
+    font-size: 16px;
+    margin: 20px 0 6px;
+}
+
+#a-propos strong {
+    color: var(--couleur-texte);
+}
+
+#a-propos .pied-de-page {
+    margin-top: 28px;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Visible uniquement pour les lecteurs d'écran et les moteurs de recherche */
+.lecteur-ecran {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
 }

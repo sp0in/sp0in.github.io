@@ -22,3 +22,10 @@ Double-cliquer sur `index.html` suffit.
 ## Déboguer
 
 La solution est affichée dans la console du navigateur (F12) au début de chaque partie, et disponible dans la variable `motSecret`.
+
+## Visibilité et statistiques
+
+- `robots.txt` et `sitemap.xml` : aident Google à trouver et indexer le site.
+- `apercu.png` : image affichée quand le lien est partagé (Discord, WhatsApp, réseaux sociaux).
+- Compteur de visites : [GoatCounter](https://www.goatcounter.com), sans cookies. Le code utilisé est dans la balise `data-goatcounter` de `index.html`. Les parties terminées et les partages sont aussi comptés (événements `partie-jour-gagnee`, `partie-libre-perdue`, `partage`...).
+- Google Search Console : la balise de validation se colle à la place du commentaire `google-site-verification` dans `index.html`.

@@ -3,12 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wordspoon</title>
+    <title>Wordspoon : jeu de mots en 5 lettres, un Wordle en mode extrême</title>
+    <meta name="description" content="Wordspoon est un jeu de mots gratuit en français, inspiré de Wordle, en version difficile : trouvez le mot de 5 lettres en 8 essais sans couleurs, uniquement avec des indices chiffrés. Un mot du jour et des parties illimitées.">
+    <link rel="canonical" href="https://sp0in.github.io/">
+    <meta name="theme-color" content="#121213">
+
+    <!-- Aperçu lors d'un partage (Discord, WhatsApp, X, Facebook...) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Wordspoon">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:url" content="https://sp0in.github.io/">
+    <meta property="og:title" content="Wordspoon : le jeu de mots en 5 lettres, version extrême">
+    <meta property="og:description" content="Trouvez le mot de 5 lettres en 8 essais… sans couleurs ! Un nouveau mot chaque jour.">
+    <meta property="og:image" content="https://sp0in.github.io/apercu.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Google Search Console : collez ici la balise de validation fournie par Google -->
+    <!-- <meta name="google-site-verification" content="VOTRE_CODE"> -->
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Wordspoon",
+        "url": "https://sp0in.github.io/",
+        "description": "Jeu de mots en français inspiré de Wordle, en mode extrême : trouvez le mot de 5 lettres en 8 essais grâce à des indices chiffrés.",
+        "applicationCategory": "GameApplication",
+        "genre": "Jeu de mots",
+        "inLanguage": "fr",
+        "operatingSystem": "Tous (navigateur web)",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+    }
+    </script>
+
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="style.css">
+
+    <!-- Compteur de visites GoatCounter (sans cookies). Compte : sp0in.goatcounter.com -->
+    <script data-goatcounter="https://sp0in.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 
+    <h1 class="lecteur-ecran">Wordspoon : jeu de mots en 5 lettres, un Wordle en mode extrême</h1>
+
+    <div id="ecran-jeu">
     <header>
         <div class="entete-cote">
             <button id="btn-aide" class="btn-icone" aria-label="Comment jouer" title="Comment jouer">?</button>
@@ -90,6 +131,24 @@
 
         </div>
     </main>
+    </div>
+
+    <!-- Présentation du jeu : utile aux joueurs qui défilent et aux moteurs de recherche -->
+    <footer id="a-propos">
+        <h2>Wordspoon, le jeu de mots en 5 lettres pour les experts</h2>
+        <p>Wordspoon est un jeu de lettres gratuit en français, inspiré de Wordle et du Mastermind. Le principe est le même : deviner un mot de 5 lettres. La différence : <strong>les cases ne se colorent jamais</strong> pendant la partie. Après chaque essai, vous savez seulement combien de lettres sont bien placées, mal placées ou absentes. À vous de déduire lesquelles !</p>
+
+        <h3>Comment jouer ?</h3>
+        <p>Tapez un mot de 5 lettres et validez. Trois compteurs apparaissent à droite : vert pour les lettres bien placées, jaune pour les lettres présentes mais mal placées, rouge pour les lettres absentes. Touchez les cases pour noter vos déductions. Vous avez 8 essais pour trouver le mot.</p>
+
+        <h3>Un mot du jour et des parties illimitées</h3>
+        <p>Chaque jour à minuit, un nouveau <strong>mot du jour</strong> attend tous les joueurs : comparez votre score avec vos amis grâce au bouton Partager. Envie de continuer ? Le mode <strong>partie libre</strong> vous propose autant de mots que vous voulez. Les mots à trouver sont des mots courants de la langue française, sans accents.</p>
+
+        <h3>Wordspoon est-il plus difficile que Wordle ?</h3>
+        <p>Oui. Sans couleurs sur les lettres, chaque essai demande plus de réflexion : c'est un vrai casse-tête de logique. C'est pour ça que vous avez 8 essais au lieu de 6.</p>
+
+        <p class="pied-de-page">Wordspoon est un projet personnel, gratuit et sans publicité. Il n'est pas affilié à Wordle ni au New York Times.</p>
+    </footer>
 
     <!-- Fenêtre : Comment jouer -->
     <div id="modale-aide" class="modale invisible" role="dialog" aria-modal="true" aria-labelledby="titre-aide">

@@ -429,6 +429,7 @@ function validerMot() {
         partie.termine = true;
         partie.victoire = victoire;
         enregistrerStats(victoire, partie.essais.length);
+        compterEvenement(`partie-${partie.mode}-${victoire ? "gagnee" : "perdue"}`);
     }
     sauvegarderPartie();
 
@@ -736,7 +737,19 @@ function texteDePartage() {
     return texte;
 }
 
+// Envoie un événement anonyme à GoatCounter (s'il est chargé) pour suivre les parties jouées
+function compterEvenement(nom) {
+    try {
+        if (window.goatcounter && typeof window.goatcounter.count === "function") {
+            window.goatcounter.count({ path: nom, title: nom, event: true });
+        }
+    } catch {
+        // le compteur ne doit jamais bloquer le jeu
+    }
+}
+
 async function partagerResultat() {
+    compterEvenement("partage");
     const texte = texteDePartage();
     try {
         await navigator.clipboard.writeText(texte);
